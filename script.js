@@ -41,7 +41,6 @@ console.log(mapArray.myMap(function (value){return (value * 3)}));
  
 // // 3. some()
 
-
 // 4. find()
 // 5. findIndex()
 // 6. every()
