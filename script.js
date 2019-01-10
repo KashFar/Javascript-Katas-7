@@ -1,77 +1,132 @@
-// Your task will be to reproduce the behavior of these Array methods with your own 
-// functions – without using JavaScript's built-in versions:
+/* eslint-disable */
 
-// 1. forEach()
-var forEachArray = ["a", "b", "c"];
-var mapArray = [1, 4, 9, 16];
+// 1. forEach
+var array1 = ['a', 'b', 'c'];
 
-function forEach(Arr) {
-    for (i = 0; i < Arr.length; i++) {
-        console.log(Arr[i]);
+array1.forEach(function(element) {
+  console.log(element);
+});
+
+Array.prototype.myForEach = function (callback){
+  for (i of this){
+    callback(i)
+  }
+}
+
+array1.myForEach(function(element){
+  console.log(element);
+})
+
+// ***********************************************
+// 2. Map 
+var array2 = [1, 4, 9, 16];
+
+// pass a function to map
+const map1 = array2.map(x => x * 2);
+
+console.log(map1);
+
+Array.prototype.myMap = function(callback){
+  let newArray = []
+  for(let i of this){
+  newArray.push(callback(i))
+  }
+return newArray
+}
+const map2 = array2.myMap(x => x * 2);
+console.log(map2);
+
+// ***********************************************
+// 3. some ()
+var someArray = [1, 2]
+function isEven(number) {
+  //  checks whether an element is even
+  return number % 2 === 0
+}
+function isOdd(number) {
+  //  checks whether an element is even
+  return number % 2 !== 0
+}
+
+Array.prototype.mySome = function (callback) {
+
+  let output = false
+  for (let i = 0; i < this.length; i++) {
+    if (callback(this[i])) {
+      output = true
     }
+  }
+  return output
 }
 
-Array.prototype.myForEach = function (callBack) {
-    for (i = 0; i < this.length; i++) {
-        callBack(this[i]);
-    }
-}
+console.log(someArray.mySome(isEven))
 
-function callBack (y){
-    console.log (y)
-}
-
-forEachArray.myForEach(callBack)
-
-// // 2. map()
-Array.prototype.myMap = function (callBack) {
-    let mapArray = []
-    for (i = 0; i < this.length; i++) {
-        mapArray.push(callBack(this[i]));
-    }
-    return mapArray;
-}
-
-function callBackMap (y){
-    return y * 3 
-}
-
-console.log(mapArray.myMap((x => x * 3)));
-console.log(mapArray.myMap(function (value){return (value * 3)}));
- 
-// // 3. some()
-
+// ***********************************************
 // 4. find()
+
+var array3 = [5, 12, 8, 130, 44];
+
+let found = array3.find(function(element) {
+  return element > 10;
+});
+
+console.log(found);
+
+Array.prototype.myFind = function (callback) {
+  for (let i of this) {
+    if (callback(i)) {
+      return i 
+    }
+  }
+  return false
+}
+console.log(array3.myFind(isEven))
+
+// ***********************************************
 // 5. findIndex()
+
+//using (i in this) lets you extract index with this[i]
+Array.prototype.myFindIndex = function (callback) {
+  for (let i in this) {
+    if (callback(this[i])) {
+      return i
+    }
+  }
+  return -1
+}
+console.log(array3.myFindIndex(isEven))
+
+// ***********************************************
 // 6. every()
+
+Array.prototype.myEvery = function (callback) {
+  for (let value of this) {
+    if (!callback(value)) {
+      return false
+    }
+  }
+  return true
+}
+console.log(array3.myEvery(isEven))
+
+// ***********************************************
 // 7. filter()
 
-// concat()
-// includes()
-var fruits = ['apple', 'banana', 'mango', 'guava'];
+Array.prototype.myFilter = function (callback) {
+  let newArray = []
 
-function checkAvailability (arr, val) {
-    return arr.some(function(arrVal) {
-        return val === arrVal;
-    });
+  for (let value of this) {
+    if (callback(value)) {
+      newArray.push(value)
+    }
+  }
+  return newArray
 }
+console.log(array3)
+console.log(array3.myFilter(isEven))
+console.log(array3.myFilter(isOdd))
 
-checkAvailability(fruits, 'kela');   // false
-checkAvailability( fruits, 'banana');   //true
-
-//using arrow function
-function checkAvailability2 (arr, val){
-    return arr.some(arrVal => val === arrVal);
-}
-
-checkAvailability2(fruits, 'kela');   // false
-checkAvailability2 (fruits, 'banana');   //true
-
-
-// slice()
-// indexOf()
-// join()
-// slice()
-// flat()
-// flatMap()
-// Array.of()
+// put in any function where return is. 
+console.log(array3.myFilter((value) => {
+  return value > 12
+}))
